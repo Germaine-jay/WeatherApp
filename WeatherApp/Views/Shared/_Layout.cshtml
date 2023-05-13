@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - WeatherApp</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/Weather.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/WeatherApp.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <!-- ======= Header ======= -->
+    <header id="header" class="">
+        <div class="container d-flex align-items-center justify-content-lg-between">
+            <h1 class="logo me-auto me-lg-0">
+                <a href="index.html">
+                    <img src="~/img/76818-forecasting-material-rain-shower-weather-icon_64x64.ico" alt="weather-logo">
+                    Weather App<span>.</span>
+                </a>
+            </h1>
+            <nav id="navbar" class="navbar order-last order-lg-0">
+
+                <ul>
+                    <li><a class="nav-link text-dark" asp-area="" asp-controller="Weather" asp-action="HomePage">Home</a></li>
+                    <li><a class="nav-link text-dark" asp-area="" asp-controller="Weather" asp-action="Cities">Cities</a></li>
+                </ul>
+                <i class="bi bi-list mobile-nav-toggle"></i>
+            </nav><!-- .navbar -->
+
+            <a href="#about" class="get-started-btn scrollto">Get Started</a>
+        </div>
+    </header><!-- End Header -->
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2023 - WeatherApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

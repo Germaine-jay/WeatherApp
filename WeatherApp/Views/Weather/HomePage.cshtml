@@ -1,0 +1,125 @@
+﻿@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+@model WeatherApp.BLL.Models.AddOrUpdateVM;
+
+@if (@TempData["SuccessMsg"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Success!</strong> @TempData["SuccessMsg"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+
+@if (@TempData["ErrMsg"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Error!</strong> @TempData["ErrMsg"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+
+<section>
+    <div class="container ">
+        <div class="container">
+            <section class="text-center ">
+                <div class="card mx-auto w-75 mt-5">
+                    <div class="card-body">
+                        <h5 class="card-title">Add city</h5>
+
+                        <form class="form-inline justify-content-center" id="add-city" asp-area="" asp-controller="Weather" asp-action="Save">
+                            <div class="alert-danger" asp-validation-summary="@ValidationSummary.All"></div>
+
+                            <div class="mb-3">
+                                <input type="hidden" asp-for="Id" />
+                                <span asp-validation-for="Id"></span>
+                            </div>
+
+                            <div class="form-group w-100">
+                                <div class="input-group">
+                                    <input class="form-control form-control-lg w-60" type="text" placeholder="Enter city Name" id="city" asp-for="@Model.CityName" required>
+                                    <span asp-validation-for="CityName"></span>
+                                    <button type="submit" class="btn btn-success ml-3">Add</button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </section>
+        </div>
+</section>
+
+<div class="mx-auto  mt-5 row portfolio-container justify-content-center">
+
+    <div class=" card col-lg-2 portfolio-item filter-app m-2">
+        <img src="assets/img/portfolio/portfolio-1.jpg" class="img-fluid" alt="">
+        <div class="portfolio-info">
+            <h4>App 1</h4>
+            <p>App</p>
+            <p>App</p>
+            <p>App</p>
+            <p>App</p>
+        </div>
+    </div>
+
+    <div class=" card col-lg-2 portfolio-item filter-web m-2">
+        <img src="assets/img/portfolio/portfolio-2.jpg" class="img-fluid" alt="">
+        <div class="portfolio-info">
+            <h4>Web 3</h4>
+            <p>App</p>
+            <p>App</p>
+            <p>App</p>
+            <p>Web</p>
+        </div>
+    </div>
+
+    <div class="card col-lg-2 portfolio-item filter-app m-2">
+        <img src="assets/img/portfolio/portfolio-3.jpg" class="img-fluid" alt="">
+        <div class="portfolio-info">
+            <h4>App 2</h4>
+            <p>App</p>
+            <p>App</p>
+            <p>App</p>
+            <p>App</p>
+        </div>
+    </div>
+
+    <div class="card col-lg-2 portfolio-item filter-card m-2">
+        <img src="assets/img/portfolio/portfolio-4.jpg" class="img-fluid" alt="">
+        <div class="portfolio-info">
+            <h4>Card 2</h4>
+            <p>App</p>
+            <p>App</p>
+            <p>App</p>
+            <p>App</p>
+        </div>
+    </div>
+
+    <div class="card col-lg-2 portfolio-item filter-web m-2">
+        <img src="assets/img/portfolio/portfolio-5.jpg" class="img-fluid" alt="">
+        <div class="portfolio-info">
+            <h4>Web 2</h4>
+            <p>App</p>
+            <p>App</p>
+            <p>App</p>
+            <p>App</p>
+        </div>
+    </div>
+
+
+</div>
+
+</div>
+</section><!-- End Portfolio Section -->
+@section Scripts
+    {
+    @{
+        Html.RenderPartial("_ValidationScriptsPartial");
+    }
+    ;
+}
