@@ -3,7 +3,7 @@
     Layout = "_Layout";
 }
 
-@model WeatherApp.BLL.Models.AddOrUpdateVM;
+@model WeatherApp.BLL.Models.CityVM;
 
 @if (@TempData["SuccessMsg"] != null)
 {
@@ -22,7 +22,7 @@
     </div>
 }
 
-
+<section id="portfolio" class="portfolio">
 <section>
     <div class="container ">
         <div class="container">
@@ -54,7 +54,8 @@
         </div>
 </section>
 
-<div class="mx-auto  mt-5 row portfolio-container justify-content-center">
+
+<div class="mx-auto  mt-5 row portfolio-container justify-content-center" id="All-city">
 
     <div class=" card col-lg-2 portfolio-item filter-app m-2">
         <img src="assets/img/portfolio/portfolio-1.jpg" class="img-fluid" alt="">
@@ -116,10 +117,10 @@
 
 </div>
 </section><!-- End Portfolio Section -->
-@section Scripts
+@*@section Scripts
     {
     @{
         Html.RenderPartial("_ValidationScriptsPartial");
     }
     ;
-}
+}*@

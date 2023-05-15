@@ -23,7 +23,7 @@
     </div>
 }
 
-@* @foreach (var item in Model.Select((value, i) => new { value, i }))
+ @foreach (var item in Model.Select((value, i) => new { value, i }))
 {
     <div class="container">
         <section class="section register align-items-center justify-content-center py-4">
@@ -35,12 +35,12 @@
 
                 <div class="btn-group" role="group">
 
-                    <form method="post" action="@Url.Action("Index", "Weather", new { Id = @item.value.Id })">
+                    <form method="post" action="@Url.Action("HomePage", "Weather", new { Id = @item.value.Id })">
                         @Html.AntiForgeryToken()
                         <button type="submit" class="btn btn-warning">Edit</button>
                     </form>
 
-                    <button type="submit" class="btn btn-danger" asp-area="" asp-controller="TodoList">Delete</button>
+                    <button type="submit" class="btn btn-secondary" asp-area="" asp-controller="TodoList">Detail</button>
 
                     <form method="post" action="@Url.Action("Delete", "Weather", new { Id = @item.value.Id })">
                         @Html.AntiForgeryToken()            
@@ -54,9 +54,9 @@
     </div>
 
     
-}*@
+}
 
-<div class="container">
+@*<div class="container">
     <section class="section register align-items-center justify-content-center py-4">
         <ul class="list-group">
             <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -75,7 +75,7 @@
             </li>
         </ul>
     </section>
-</div>
+</div>*@
 
 @section Scripts
     {

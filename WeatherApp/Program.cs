@@ -22,6 +22,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork<WeatherAppDbContext>>();
 builder.Services.AddScoped<ICitiesServices, CitiesServices>();
+builder.Services.AddScoped<IWeatherServices, WeatherServices>();
 builder.Services.AddAutoMapper( Assembly.Load("WeatherApp.BLL"));
 
 var app = builder.Build();

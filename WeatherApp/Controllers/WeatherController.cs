@@ -15,11 +15,11 @@ namespace WeatherApp.Controllers
             _citiesService = citiesService;
         }
 
-        /*public async Task<IActionResult> Index(int Id)
+        public async Task<IActionResult> GetAllCities()
         {
-            var city = await _citiesService.GetCity(Id);
-            return View(city);
-        }*/
+            var cities = await _citiesService.GetCities();
+            return View(cities);
+        }
 
         public async Task<IActionResult> Cities()
         {
@@ -50,11 +50,10 @@ namespace WeatherApp.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Save(AddOrUpdateVM model)
+        public async Task<IActionResult> Save(CityVM model)
         {
             if (ModelState.IsValid)
             {
-
                 var (successful, msg) = await _citiesService.AddOrUpdateAsync(model);
 
                 if (successful)
@@ -62,14 +61,14 @@ namespace WeatherApp.Controllers
 
                     TempData["SuccessMsg"] = msg;
 
-                    return RedirectToAction("Index");
+                    return RedirectToAction("HomePage");
                 }
 
                 TempData["ErrMsg"] = msg;
-                return View("Index");
+                return View("HomePage");
 
             }
-            return View("Index");
+            return View("HomePage");
         }
 
         [HttpPut]
@@ -83,38 +82,38 @@ namespace WeatherApp.Controllers
                 if (successful)
                 {
                     TempData["SuccessMsg"] = msg;
-                    return RedirectToAction("Index");
+                    return RedirectToAction("HomePage");
                 }
 
                 TempData["ErrMsg"] = msg;
-                return View("Index");
+                return View("HomePage");
             }
-            return View("Index");
+            return View("HomePage");
         }
 
         [HttpPost("{Id}")]
-        public async Task<IActionResult> Delete(int userId)
+        public async Task<IActionResult> Delete(int Id)
         {
             if (ModelState.IsValid)
             {
 
-                var (success, msg) = await _citiesService.DeleteAsync(userId);
+                var (success, msg) = await _citiesService.DeleteAsync(Id);
                 if (success)
                 {
                     TempData["SuccessMsg"] = msg;
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Cities");
                 }
 
                 TempData["ErrMsg"] = msg;
-                return RedirectToAction("Index");
+                return RedirectToAction("Cities");
 
             }
-            return View("Index");
+            return View("Cities");
 
         }
 
         [HttpPost]
-        public async Task<IActionResult> SaveAddOrUpdate(AddOrUpdateVM model)
+        public async Task<IActionResult> SaveAddOrUpdate(CityVM model)
         {
             if (ModelState.IsValid)
             {
@@ -125,14 +124,14 @@ namespace WeatherApp.Controllers
                 {
 
                     TempData["SuccessMsg"] = msg;
-                    return RedirectToAction("Index");
+                    return RedirectToAction("HomePage");
                 }
 
                 TempData["ErrMsg"] = msg;
-                return View("Index");
+                return View("HomePage");
 
             }
-            return View("Index");
+            return View("HomePage");
         }
     }
 }

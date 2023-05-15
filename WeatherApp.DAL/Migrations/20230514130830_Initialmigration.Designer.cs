@@ -11,7 +11,7 @@ using WeatherApp.DAL.Database;
 namespace WeatherApp.DAL.Migrations
 {
     [DbContext(typeof(WeatherAppDbContext))]
-    [Migration("20230513210109_Initialmigration")]
+    [Migration("20230514130830_Initialmigration")]
     partial class Initialmigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
