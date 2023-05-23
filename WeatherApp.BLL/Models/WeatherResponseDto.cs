@@ -8,34 +8,30 @@ namespace WeatherApp.BLL.Models
 {
     public class WeatherResponse
     {
-        public string visibility { get; set; }
-        public string name { get; set; }
-        public Weather[] weather { get; set; }
-        public Wind wind { get; set; }
-        public Main main { get; set; }
-
-        public class Weather
-        {
-            public int id { get; set; }
-            public string main { get; set; }
-            public string description { get; set; }
-            public string icon { get; set; }
-        }
-
-        public class Wind
-        {
-            public int speed { get; set; }
-            public int deg { get; set; }
-            public int id { get; set; }
-        }
-
-        public class Main
-        {
-            public string temp { get; set; }
-            public string feels_like { get; set; }
-            public string temp_min { get; set; }
-            public string temp_max { get; set; }
-            public string pressure { get; set; }
-            public string humidity { get; set; }
-        }
+        public string Name { get; set; }
+        public int Visibility { get; set; }
+        public string Cod { get; set; }
+        public string Message { get; set; }
+        public WeatherInfo[] Weather { get; set; }
+        public WindInfo Wind { get; set; }
+        public MainInfo Main { get; set; }
     }
+
+    public class WeatherInfo
+    {
+        public string Description { get; set; }
+        public string Icon { get; set; }
+    }
+
+    public class WindInfo
+    {
+        public double Speed { get; set; }
+    }
+
+    public class MainInfo
+    {
+        public int Humidity { get; set; }
+        public double Temp { get; set; }
+    }
+}
+

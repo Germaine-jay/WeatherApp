@@ -1,23 +1,33 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using WeatherApp.BLL.Interface;
 using WeatherApp.BLL.Models;
 
 namespace WeatherApp.Controllers
 {
+    [Route("[controller]/[action]/{id?}")]
     [AutoValidateAntiforgeryToken]
     public class WeatherController : Controller
     {
         private readonly ICitiesServices _citiesService;
+        private readonly IWeatherServices _weatherServices;
 
-        public WeatherController(ICitiesServices citiesService)
+        public WeatherController(ICitiesServices citiesService, IWeatherServices weatherServices)
         {
             _citiesService = citiesService;
+            _weatherServices = weatherServices;
         }
 
-        public async Task<IActionResult> GetAllCities()
+
+        public async Task<IActionResult> HomePage(int Id)
         {
-            var cities = await _citiesService.GetCities();
+            var city = await _citiesService.GetCity(Id);
+            return View(city);
+        }
+
+
+        public async Task<IActionResult> AllCitiesWeather()
+        {
+            var cities = await _weatherServices.GetWeather();      
             return View(cities);
         }
 
@@ -27,11 +37,6 @@ namespace WeatherApp.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> HomePage(int Id)
-        {
-            var city = await _citiesService.GetCity(Id);
-            return View(city);
-        }
 
 
         public async Task<IActionResult> City(int Id)
@@ -91,7 +96,7 @@ namespace WeatherApp.Controllers
             return View("HomePage");
         }
 
-        [HttpPost("{Id}")]
+        [HttpPost]
         public async Task<IActionResult> Delete(int Id)
         {
             if (ModelState.IsValid)

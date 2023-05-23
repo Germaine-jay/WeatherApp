@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using System.Reflection;
 using WeatherApp.BLL.Implementation;
 using WeatherApp.BLL.Interface;
@@ -14,7 +15,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<WeatherAppDbContext>(opts =>
 {
     var defaultConn = builder.Configuration.GetSection("ConnectionString")["DefaultConn"];
-    opts.UseSqlServer(defaultConn);
+    
+opts.UseSqlServer(defaultConn, sqlServerOptions =>
+    sqlServerOptions.EnableRetryOnFailure());
 });
 
 builder.Services.AddControllersWithViews();
@@ -44,6 +47,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Weather}/{action=HomePage}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

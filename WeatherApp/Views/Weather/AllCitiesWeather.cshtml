@@ -1,0 +1,35 @@
+﻿@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+@model IEnumerable<WeatherApp.BLL.Models.WeatherVM>
+
+<section id="portfolio" class="portfolio">
+
+    <div class="mx-auto  mt-5 row portfolio-container justify-content-center" id="All-city">
+        @foreach (var item in Model.Select((value, i) => new { value, i }))
+        {
+            @if(Model != null)
+            {
+                <div class=" card  p-3 col-lg-2 portfolio-item filter-app m-2">
+                    <img src="@item.value.WeatherIcon" class="img-thumbnail fa-6x" alt="">
+                    <div class="portfolio-info">
+                        <h4>@item.value.Name</h4>
+                        <p>Description: @item.value.WeatherDescription</p>
+                        <p>Visibility: @item.value.Visibility</p>
+                        <p>Temprature: @item.value.MainTemprature</p>                   
+                        <p>Humidity: @item.value.MainHumidity</p>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</section><!-- End Portfolio Section -->
+@section Scripts
+    {
+    @{
+        Html.RenderPartial("_ValidationScriptsPartial");
+    }
+    ;
+}
