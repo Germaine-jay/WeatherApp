@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using WeatherApp.BLL.Interface;
 using WeatherApp.BLL.Models;
 using WeatherApp.DAL.Entities;
@@ -84,15 +85,24 @@ namespace WeatherApp.BLL.Implementation
 
         public async Task<(bool successful, string msg)> AddOrUpdateAsync(CityVM model)
         {
-
+            var cities = await _cityRepo.GetAllAsync();
             City cityId = await _cityRepo.GetSingleByAsync(u => u.Id == model.Id);
+
+            var inputCity = cities.Any(c => c.CityName == model.CityName);
+
             if (cityId == null || String.IsNullOrEmpty($"{cityId.Id}"))
             {
                 var city = _mapper.Map<City>(model);
-                var addCity = await _cityRepo.AddAsync(city);
+                if(inputCity == false)
+                {
 
-                return addCity != null ? (true, $"City: {model.CityName} was successfully created!") : (false, "Failed To create user!");
+                    var addCity = await _cityRepo.AddAsync(city);
+                    return addCity != null ? (true, $"City: {model.CityName} was successfully created!") : (false, "Failed To create user!");
+                }
+                return (false, "Entry Already Exist");
+
             }
+
 
             var userupdate = _mapper.Map(model, cityId);
             var rowChanges = await _cityRepo.UpdateAsync(userupdate);
@@ -100,5 +110,26 @@ namespace WeatherApp.BLL.Implementation
             return rowChanges != null ? (true, $"City Name update was successful!") : (false, "Failed To save changes!");
 
         }
+
+       /* public async Task<(bool successful, string msg)> ValidateInput(string place)
+        {
+            var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=Helsinki&units=metric&appid=YOUR_API_KEY";
+            // Replace "YOUR_API_KEY" with your actual API key from OpenWeatherMap
+
+            using (var httpClient = new HttpClient())
+            {
+                var response = await httpClient.GetAsync(apiUrl);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var data = JsonConvert.DeserializeObject<dynamic>(json);
+
+
+
+                    return weatherViewModels;
+                }
+            }
+        }*/
     }
 }
