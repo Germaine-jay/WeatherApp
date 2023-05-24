@@ -66,7 +66,7 @@ namespace WeatherApp.Controllers
 
                     TempData["SuccessMsg"] = msg;
 
-                    return RedirectToAction("HomePage");
+                    return RedirectToAction("Cities");
                 }
 
                 TempData["ErrMsg"] = msg;

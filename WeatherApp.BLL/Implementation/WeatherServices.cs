@@ -37,9 +37,12 @@ namespace WeatherApp.BLL.Implementation
                 foreach (var city in cityList)
                 {
                     var apiUrl = $"https://api.openweathermap.org/data/2.5/weather?q={city.CityName}&units=metric&appid={_ApiKey}";
-                   
-                    tasks.Add(FetchWeatherAsync(httpClient, apiUrl));
-                   
+                    var fetchweather = FetchWeatherAsync(httpClient, apiUrl);
+                    
+                    if(fetchweather != null) 
+                    {
+                        tasks.Add(fetchweather);                 
+                    }
                 }
 
                 await Task.WhenAll(tasks);

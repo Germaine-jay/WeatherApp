@@ -89,47 +89,46 @@ namespace WeatherApp.BLL.Implementation
             City cityId = await _cityRepo.GetSingleByAsync(u => u.Id == model.Id);
 
             var inputCity = cities.Any(c => c.CityName == model.CityName);
+            var validate = await ValidateInput(model.CityName);
 
             if (cityId == null || String.IsNullOrEmpty($"{cityId.Id}"))
             {
                 var city = _mapper.Map<City>(model);
-                if(inputCity == false)
+                if (inputCity == false)
                 {
-
                     var addCity = await _cityRepo.AddAsync(city);
                     return addCity != null ? (true, $"City: {model.CityName} was successfully created!") : (false, "Failed To create user!");
                 }
-                return (false, "Entry Already Exist");
-
+                return (false, "Entry Already Exist or Invalid city name");
             }
-
 
             var userupdate = _mapper.Map(model, cityId);
             var rowChanges = await _cityRepo.UpdateAsync(userupdate);
 
             return rowChanges != null ? (true, $"City Name update was successful!") : (false, "Failed To save changes!");
-
         }
 
-       /* public async Task<(bool successful, string msg)> ValidateInput(string place)
-        {
-            var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=Helsinki&units=metric&appid=YOUR_API_KEY";
-            // Replace "YOUR_API_KEY" with your actual API key from OpenWeatherMap
 
-            using (var httpClient = new HttpClient())
+        public async Task<string> ValidateInput(string place)
+        {
+            var apiUrl = "https://countriesnow.space/api/v0.1/countries/states";
+            using (HttpClient httpClient = new HttpClient())
             {
+
                 var response = await httpClient.GetAsync(apiUrl);
 
-                if (response.IsSuccessStatusCode)
+                var json = await response.Content.ReadAsStringAsync();
+                PlaceData responsedata = JsonConvert.DeserializeObject<PlaceData>(json);
+
+                bool isCountry = responsedata.Data.Any(c => c.Name.Equals(place, StringComparison.OrdinalIgnoreCase));
+                bool isState = responsedata.Data.Any(country => country.States.Any(state => state.Name.Equals(place, StringComparison.OrdinalIgnoreCase)));
+
+                if (isState == true)
                 {
-                    var json = await response.Content.ReadAsStringAsync();
-                    var data = JsonConvert.DeserializeObject<dynamic>(json);
-
-
-
-                    return weatherViewModels;
+                    return "country exist";
                 }
+                return "place does not exist";
             }
-        }*/
+        }
     }
 }
