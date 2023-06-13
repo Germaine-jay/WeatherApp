@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using System.Net.Http;
 using WeatherApp.BLL.Interface;
 using WeatherApp.BLL.Models;
 using WeatherApp.DAL.Entities;
@@ -14,6 +15,7 @@ namespace WeatherApp.BLL.Implementation
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRepository<City> _cityRepo;
         private readonly IConfiguration _configuration;
+        private readonly string? _ApiKey;
 
         public CitiesServices(IConfiguration configuration, IUnitOfWork unitOfWork, IMapper mapper)
         {
@@ -21,6 +23,7 @@ namespace WeatherApp.BLL.Implementation
             _unitOfWork = unitOfWork;
             _cityRepo = _unitOfWork.GetRepository<City>();
             _configuration = configuration;
+            _ApiKey = _configuration?.GetSection("Weather").GetSection("ApiKey").Value;
         }
 
         public async Task<(bool successful, string msg)> Create(CityVM model)
@@ -28,7 +31,7 @@ namespace WeatherApp.BLL.Implementation
             var user = _mapper.Map<City>(model);
             var rowChanges = await _cityRepo.AddAsync(user);
 
-            return rowChanges != null ? (true, $"User: {model.CityName} was successfully created!") : (false, "Failed To create user!");
+            return rowChanges != null ? (true, $"User: {model.CityName} was successfully created!") : (false, "Failed To create city!");
         }
 
 
@@ -47,10 +50,8 @@ namespace WeatherApp.BLL.Implementation
         {
             var user = await _cityRepo.GetSingleByAsync(u => u.Id == Id);
             var Auser = _mapper.Map<CityVM>(user);
-
             return Auser;
         }
-
 
         public async Task<(bool successful, string msg)> Update(CityVM model)
         {
@@ -68,7 +69,6 @@ namespace WeatherApp.BLL.Implementation
 
         }
 
-
         public async Task<(bool successful, string msg)> DeleteAsync(int Id)
         {
             var city = await _cityRepo.GetSingleByAsync(u => u.Id == Id);
@@ -82,7 +82,6 @@ namespace WeatherApp.BLL.Implementation
             return await _unitOfWork.SaveChangesAsync() >= 0 ? (true, $"{city.CityName} was deleted") : (false, $"Delete Failed");
         }
 
-
         public async Task<(bool successful, string msg)> AddOrUpdateAsync(CityVM model)
         {
             var cities = await _cityRepo.GetAllAsync();
@@ -93,13 +92,13 @@ namespace WeatherApp.BLL.Implementation
 
             if (cityId == null || String.IsNullOrEmpty($"{cityId.Id}"))
             {
-                var city = _mapper.Map<City>(model);
-                if (inputCity == false)
+                if (inputCity == false && validate == true)
                 {
+                    var city = _mapper.Map<City>(model);
                     var addCity = await _cityRepo.AddAsync(city);
-                    return addCity != null ? (true, $"City: {model.CityName} was successfully created!") : (false, "Failed To create user!");
+                    return addCity != null ? (true, $"City: {model.CityName} was successfully created!") : (false, "Failed To create!");
                 }
-                return (false, "Entry Already Exist or Invalid city name");
+                return (false, "Entry Already Exist or Invalid Input");
             }
 
             var userupdate = _mapper.Map(model, cityId);
@@ -108,26 +107,17 @@ namespace WeatherApp.BLL.Implementation
             return rowChanges != null ? (true, $"City Name update was successful!") : (false, "Failed To save changes!");
         }
 
-
-        public async Task<string> ValidateInput(string place)
+        public async Task<bool> ValidateInput(string place)
         {
-            var apiUrl = "https://countriesnow.space/api/v0.1/countries/states";
+            var apiUrl = $"https://api.openweathermap.org/data/2.5/weather?q={place}&units=metric&appid={_ApiKey}";
             using (HttpClient httpClient = new HttpClient())
             {
-
                 var response = await httpClient.GetAsync(apiUrl);
-
-                var json = await response.Content.ReadAsStringAsync();
-                PlaceData responsedata = JsonConvert.DeserializeObject<PlaceData>(json);
-
-                bool isCountry = responsedata.Data.Any(c => c.Name.Equals(place, StringComparison.OrdinalIgnoreCase));
-                bool isState = responsedata.Data.Any(country => country.States.Any(state => state.Name.Equals(place, StringComparison.OrdinalIgnoreCase)));
-
-                if (isState == true)
-                {
-                    return "country exist";
-                }
-                return "place does not exist";
+                if (response.IsSuccessStatusCode) ;          
+                    var json = await response.Content.ReadAsStringAsync();
+                    WeatherResponse responsedata = JsonConvert.DeserializeObject<WeatherResponse>(json);
+                    Console.WriteLine(responsedata.Cod, responsedata.Message);
+                    return responsedata.Cod != "404"? true : false;           
             }
         }
     }

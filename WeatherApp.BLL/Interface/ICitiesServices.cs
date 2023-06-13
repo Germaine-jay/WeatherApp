@@ -11,7 +11,7 @@ namespace WeatherApp.BLL.Interface
         Task<(bool successful, string msg)> AddOrUpdateAsync(CityVM model);
         Task<IEnumerable<CityVM>> GetCities();
         Task<CityVM> GetCity(int Id);
-        Task<string> ValidateInput(string place);
+        Task<bool> ValidateInput(string place);
 
 
     }
