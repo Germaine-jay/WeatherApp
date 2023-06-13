@@ -116,7 +116,6 @@ namespace WeatherApp.BLL.Implementation
                 if (response.IsSuccessStatusCode) ;          
                     var json = await response.Content.ReadAsStringAsync();
                     WeatherResponse responsedata = JsonConvert.DeserializeObject<WeatherResponse>(json);
-                    Console.WriteLine(responsedata.Cod, responsedata.Message);
                     return responsedata.Cod != "404"? true : false;           
             }
         }
